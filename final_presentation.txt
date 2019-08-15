@@ -1,14 +1,14 @@
 各位主管各位評審大家好
-我是BSID的實習生楊于萱
+我是楊于萱
 而我的supervisor是Gina局
-今天很高興能在這裡和大家分享我的實習心得以及報告-TSMC Mobile Approval Center
+很高興能和大家分享我的實習心得以及報告-TSMC Mobile Approval Center
 
-以下是今天的outline
-首先我會先介紹整個project的background
+這是等一下的outline
+首先我會先介紹project
 接著是所用到的技術以及成果分享
 最後是在台積實習的心得及建議
 
-在開始介紹approval center前
+在開始介紹前
 我相信各位主管都碰過以下這個情境
 今天你在ITSR TNA上收到多張簽核申請
 也就意味著你要開啟不同系統分別進行簽核
@@ -20,119 +20,106 @@
 怎麼做呢?
 1. 我們提供了一套flexible framework
 讓所有AP以layer的方式串接在我們的平台上
-簡單來說AC扮演就是一個一站式的解決方案 幫助你有效管理所有簽核
+簡單來說我們是一個一站式的解決方案 幫助你管理所有簽核
 
 2. 我們藉由手機的優勢 跟主動通知功能 讓主管們能進行即時簽核
 
 而我們最大的貢獻就是可以有效的為企業節省時間
-經過統計 台積共有5148位主管有簽核的需求
+經過統計 台積有超過5148位主管有簽核的需求
 假設一個主管平均一天花十分鐘在不同系統上進行簽核 那麼對台積而言 光一天所累積的時間就足足超過一個月 非常可觀
 
-現在只要透過Approval center
+現在有了Approval center
 主管們可以在短時間內完成所有簽核
-同時能把這些寶貴的時間留給其他更重要的事
+同時把時間留給其他更重要的事
 
-那在這次的實習計畫中我主要負責兩個部分
-第一個是 開發ios版的 push notification service
-第二個是 improve approval center的UI and UX
-待會會再做介紹
-
-再來介紹這次project中兩個技術
-第一個是Flutter
-它是Google推出的跨平臺mobile framework
+那為了要去縮短開發時程
+我們採用了Google的跨平臺mobile framework - Flutter
 它的好處在於 開發者只須寫一套程式就可以同時部屬在tphone和iphone上
-能有效的縮短整個開發時程
+而且值得一提的是 Approval center是台積第一個將Flutter應用在mutliple devices的成功案例
 
-第二個是material design
-它是一套視覺設計語言
-正因為有一套定義好的guideline
-所以開發者在設計的時候會輕鬆一點
-而且產品會更直覺 更有一致性
-直接提高產品的usability
+再來 為了要提高usability
+我們採用了 material design
+因為他已經有一套定義好的guideline
+所以我們設計出來的產品會更直覺 更有一致性
 
 
-我所負責的第一個任務是開發iOS的push notification service
-主要是因為我們發現了幾個痛點
-比如說 在現行的方案中 主管要自己去看APP才會知道有新的簽核單進來
-這就很容易讓他們忽略 而導致某些特定申請過期失效 或是 底下的人沒辦法繼續工作等
+我的第一個任務是開發iOS的push notification service
+主要是因為我們發現在現行的方案中 主管要自己去看APP才會知道有新的簽核單進來
+這就很容易讓他們忽略 而導致某些特定申請過期失效
+所以我們就開發了主動通知的功能來解決問題
 
-所以我們就開發了主動通知的功能來解決這個問題
-push service是由device registration和push notification兩個部分所組成
+[push service是由device registration和push notification兩個部分所組成]
 
 而且更重要的是
 當初我們在設計這個service的時候
-就有考量到service reusability
+就有考量到它的reusability
 所以現在我們把這條路打通以後
 未來如果有其他ios APP要使用notification service
 只需要follow我們訂定的interface就可以串接使用
 不用再投入人力進行開發
 
 要使用這個服務
-一開始我們需要透過device registration 將使用者的NT account和Device token進行mapping
-在這裡解釋一下 Device token是裝置的識別碼 靠著這個token 
+一開始我們需要把使用者的Windows account和Device token進行mapping
+Device token是裝置的識別碼 靠著這個token 
 Apple Server就會知道該把訊息發給哪一隻手機
 
 在註冊前 client端需要和identity provider 進行身分認證來取得token
 接著再帶著這段token和user information去call我們的Device registration service
 來判斷要註冊或是更新DB內的mapping data
 
-註冊好account和device token後
+註冊好後
 iphone就能接收Approval center所發送notification
 
 而我們要如何向user推播呢?
-當Todo server接收到AP傳送的新任務後
+當Approval center接收到AP傳送的新任務後
 一樣也會向Identity provider取得token
 再帶著要推播的內容和token 去呼叫push notification service
 如果這個token是合法的話 就會打到Apple server 由APPLE來通知相對應的iphone device
 
 我的另一個任務是去加強approval center
-在UI 我們以tsmc logo顏色作為基調 改變APP color scheme 讓它更有現代感
+比如說 我把很多人反映不夠直覺的select all icon拿掉
+把它獨立出來 並加了一個filter 可以快速幫user篩選出未讀 提升了APP實用性
 
-而UX的部分 我們消化了user的feedback 
-並follow material design的guidelines來進行調整 讓整個APP使用起來更user-friendly
+進到Application details
+我們採用gallery的概念
+讓user往左往右來切換不同的簽核單
 
-除此之外 我們加入客製化的元素 讓APP看起來更加親切
+另外我發現我們的介面不夠彈性
+所以增加了一個bottom sheet的機制來handle未來新增的功能
 
-重新設計後 可以看到UI看起來更鮮明
-而且針對home的部分 我們新增custom greetings和friendly reminder
+接著我們來看一下右邊經過調整後的dialog
+button位置更直覺 而且因為顏色不同讓人可以一眼就分辨出來
 
-接著我把很多人反映不夠直覺的select all icon拿掉
-採用了和gmail一樣的設計 把它獨立出來
-並加了一個filter 可以快速幫user篩選出未讀的簽核申請 提升了APP實用性
+總結我所做的調整
+在UI 我們以tsmc logo顏色來改變APP color scheme 讓它更有現代感
+而UX我們follow material design的guidelines來進行調整 讓整個APP使用起來更user-friendly
+另外 我們加入一個亮點就是客製化的元素 讓APP更有親切感
 
-因為時間的關係 在這裡只能提以上比較重要的兩點
-
-[另外 我發現目前APP的介面設計不夠彈性
-所以在這裡我們加入bottom sheet的機制
-未來如果有其他新功能 就可以在這裡做handle]
-
-
+最後我要分享的是實習的心得以及建議
 在這裡實習的期間
 我覺得對我來說最大的收穫就是實際參與業界的開發
-我們這個push notification service 是要正式上線 且未來還會有更多APP一起使用
-所以在開發的時候較要考量很多因素 同時也要注意程式的嚴謹性 而這確實有別於以往我在學校的開發經驗
+我們這個 service 是要正式上線 且未來還會有更多APP一起使用
+所以在開發的時候較要考量很多因素 同時也要確保它的嚴謹性 而這就有別於以往我在學校的開發經驗
 
-同時這個service牽涉到很多部門 所以需要大家一同來協助才能順利完成 所以也體驗到了團隊合作的重要性
+同時這個service牽涉到很多部門 所以也體驗到了團隊合作的重要性
 
 每當我碰到一些瓶頸的時候
-我的supervisor buddy和周圍的正職同仁們都很願意給予我建議和協助
+我的supervisor buddy 都很願意給予我建議和協助
 而這些都是讓我可以保有熱情 努力完成工作的動力
 
 而對於台積的建議
-像這次的project是跨部門的案子 有一些資料呈現的方式沒有溝通好
-就會導致後續還要做更改
-所以我會建議 跨部門間的溝通可以再更完整 更詳細一點
+像這次的project是跨部門的案子 有些地方事前沒有溝通好
+就會導致後續還要回頭做更改
+所以我會建議我們要加強跨部門間的溝通
 
-另一點就是台積正在推動mobile first solution
+另一點就是台積IT正在推動mobile first solution
 所以我認為我們要針對這一塊 訂定更完善的開發規範
 多開設一些training課程 比如說app development 和 user experience
-我覺得這都會對台積接下來的發展帶來直接的幫助
+這都可以對台積接下來的發展帶來直接的幫助
 
 我的報告就到這邊
 最後我想要藉由這個機會感謝台積 我的主管 還有我的buddy們
 一直都很肯定我的能力 願意給我這個實習表現的機會
-以上是我的實習報告 謝謝大家 
-
-
+以上是我的實習報告 謝謝大家
 
 
